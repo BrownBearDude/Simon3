@@ -29,11 +29,14 @@ def all():
 def create():
     form = EventForm()
     if request.method == 'POST' and form.validate_on_submit():
+        data = form.data
+        data['image'] = check_upload_file(form)
+        print("after", file=sys.stderr) 
 
-        session['create'] = form.data
-        session['create_iamge'] = check_upload_file(form)
+        print(data, file=sys.stderr)
+        session['create'] = data
         
-        return redirect(url_for("events.create.tickets"))
+        return redirect(url_for("events.tickets"))
 
     if create in session:
         form.process(data=session['create'])
@@ -42,7 +45,9 @@ def create():
 
 @destbp.route('/create/tickets', methods=['GET', 'POST'])
 def tickets():
-    form = EventTicketsForm
+    form = EventForm()
+
+    return render_template('events/eventcreation.html', form=form)
 
 
 

@@ -17,6 +17,7 @@ class EventForm(FlaskForm):
         FileRequired(message='Image cannot be empty'),
         FileAllowed(ALLOWED_FILE, message='Only supports PNG, JPG, png, jpg')])
     artists = FieldList(StringField("Artist", validators=[InputRequired()]), min_entries=1)
+    tickets = FieldList(FormField(Ticket))
     submit = SubmitField("Submit")
 
 class Ticket(Form):
