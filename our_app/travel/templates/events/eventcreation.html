@@ -10,65 +10,39 @@
 
     
     <!-- {{ render_form(form) }} -->
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="theForm"> 
         {{render_field(form.event_name)}}
         {{render_field(form.date)}}
         {{render_field(form.description)}}
+        <img src="{{ form.imagePath.data }}" style="max-width: 150px; max-height: 150px;"></img>
         {{render_field(form.image, accept=".PNG,.png,.JPEG,.jpeg,.JPG,.jpg")}}
+        {{form.imagePath()}}
         <h4>Artists</h4>
-       
-        <button id="Add Artist" class="btn btn-primary">Add Artist</button>
-        <button id="Sub Artist" class="btn btn-primary">Sub Artist</button>
-        <div id="artists">
+        
+
+        {{render_field(form.addArtist, formnovalidate=True)}}
+        {{render_field(form.subArtist, formnovalidate=True)}}
         {% for artist in form.artists %}
             {{render_field(artist)}}
         {% endfor %}
-        </div>
+
         <h4>Ticket Options  </h4>
        
-        
+        {{render_field(form.addTicket, formnovalidate=True)}}
+        {{render_field(form.subTicket, formnovalidate=True)}}
         {% for ticket in form.tickets %}
             {{render_field(ticket)}}
         {% endfor %}
-        {{render_field(form.submit)}}
+        {{render_field(form.submitsubmit)}}
         {{ form.csrf_token }}
     </form>
 
 </div>
 <script>
-    num = 0
-    document.getElementById("Add Artist").addEventListener("click", AddArtist)
-    
-
-    function AddArtist(e) {
-        e.preventDefault()
-        num += 1
-
-        console.log("clicked")
-        newDiv = document.createElement("div")
-        newDiv.setAttribute("class", "mb-3 required")
-        label = document.createElement("label")
-        label.setAttribute("class", "form-label")
-        // label.setAttribute("for", "artists-"+num)
-        label.textContent = "Artist"
-        newDiv.appendChild(label)
-        input = document.createElement("input") 
-        input.setAttribute("id", "artists-"+num)
-        input.setAttribute("class", "form-control")
-        input.setAttribute("name", "artists-"+num)
-        input.setAttribute("required", "")
-        newDiv.appendChild(input)
-
-        document.getElementById("artists").appendChild(newDiv)
-
-    }
-    document.getElementById("Sub Artist").addEventListener("click", SubArtist)
-    function SubArtist(e) {
-        e.preventDefault()
-        children = document.getElementById("artists").children
-        children[children.length-1].remove()
-        num-=1
-    }
+    document.getElementById('image').onchange = function() {
+        form = document.getElementById('theForm')
+        form.submit()
+    };
 </script>
 
 {% endblock %}

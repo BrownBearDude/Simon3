@@ -1,12 +1,15 @@
 from flask_wtf import FlaskForm, Form
-from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, DateField, FieldList, FormField, DecimalField
+from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, DateField, FieldList, FormField, DecimalField, HiddenField
 from wtforms.validators import InputRequired, Email, EqualTo
 from flask_wtf.file import FileRequired, FileField, FileAllowed
 
 ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'png', 'jpg', 'jpeg'}
 
 
-
+class Ticket(Form):
+    ticket_name = StringField("Ticket Name", validators=[InputRequired()])
+    ticket_price = DecimalField("Ticket Price", validators=[InputRequired()])
+    ticket_description = TextAreaField("Ticket Description", validators=[InputRequired()])
     
 # creating a new event
 class EventForm(FlaskForm):
@@ -14,21 +17,16 @@ class EventForm(FlaskForm):
     date = DateField("Date", validators=[InputRequired()])
     description = TextAreaField("Description", validators=[InputRequired()])
     image = FileField('Event Image', validators=[
-        FileRequired(message='Image cannot be empty'),
         FileAllowed(ALLOWED_FILE, message='Only supports PNG, JPG, png, jpg')])
+    imagePath = HiddenField()
+    addArtist = SubmitField("AddArtist")
+    subArtist = SubmitField("SubArtist")
     artists = FieldList(StringField("Artist", validators=[InputRequired()]), min_entries=1)
-    tickets = FieldList(FormField(Ticket))
-    submit = SubmitField("Submit")
-
-class Ticket(Form):
-    ticket_name = StringField("Ticket Name", validators=[InputRequired()])
-    ticket_price = DecimalField("Ticket Price", validators=[InputRequired()])
-    ticket_description = TextAreaField("Ticket Description", validators=[InputRequired()])
-
-class EventTicketsForm(FlaskForm):
+    addTicket = SubmitField("AddTicket")
+    subTicket = SubmitField("SubTicket")
     tickets = FieldList(FormField(Ticket), min_entries=1)
-    submit = SubmitField("Submit")
-    
+    submitsubmit = SubmitField("Submit")
+
 
 # Create new destination
 class DestinationForm(FlaskForm):
