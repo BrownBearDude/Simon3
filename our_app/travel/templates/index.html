@@ -101,101 +101,21 @@
             </div>
         </div>
         <hr />
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
-                    <div class="col d-none d-lg-block">
-                        <div class="card">
-                            <!-- https://upload.wikimedia.org/wikipedia/commons/1/1a/Bangkok%2C_Thailand%2C_Party%2C_Lights_and_sounds%2C_Electronic_music.jpg-->
-                            <img src="static/img/thailand.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="events/show.html">
-                                    <h5 class="card-title">An Electro Festival</h5>
-                                </a>
-                                <p class="card-text">This is a longer card with supporting text below as a natural
-                                    lead-in to
-                                    additional content. This content is a little bit longer.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col d-none d-sm-block">
-                        <div class="card">
-
-                            <!-- https://upload.wikimedia.org/wikipedia/commons/c/c8/Bob_James_Jazzmen_jazz_music.jpg-->
-                            <img src="static/img/Untitled.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="events/show.html">
-                                    <h5 class="card-title">Jazz and Classical Music Festival</h5>
-                                </a>
-                                <p class="card-text">This is a longer card with supporting text below as a natural
-                                    lead-in to
-                                    additional content. This content is a little bit longer.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <!-- https://upload.wikimedia.org/wikipedia/commons/7/71/20200229_03_Alcest_%2849605436357%29.jpg -->
-                            <img src="./static/img/20200229_03_Alcest_(49605436357).jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="events/show.html">
-                                    <h5 class="card-title">Rock & Roll Concert Concert</h5>
-                                </a>
-                                <p class="card-text">This is a longer card with supporting text below as a natural
-                                    lead-in to
-                                    additional content. This content is a little bit longer.</p>
-                            </div>
-                        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+            {% for event in events %}
+            <div class="col d-none d-sm-block">
+                <div class="card">
+    
+                    <img src="{{event.image}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <a href="{{event.id}}">
+                            <h5 class="card-title">{{ event.event_name }} -- {{event.date}}</h5>
+                        </a>
+                        <p class="card-text">{{event.description|truncate(100, False, '...', 0)}}</p>
                     </div>
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
-                    <div class="col d-none d-lg-block">
-                        <div class="card">
-                            <!-- https://upload.wikimedia.org/wikipedia/commons/1/1a/Bangkok%2C_Thailand%2C_Party%2C_Lights_and_sounds%2C_Electronic_music.jpg-->
-                            <img src="static/img/thailand.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="events/show.html">
-                                    <h5 class="card-title">Electronic Music</h5>
-                                </a>
-                                <p class="card-text">This is a longer card with supporting text below as a natural
-                                    lead-in to
-                                    additional content. This content is a little bit longer.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col d-none d-sm-block">
-                        <div class="card">
-
-                            <!-- https://upload.wikimedia.org/wikipedia/commons/c/c8/Bob_James_Jazzmen_jazz_music.jpg-->
-                            <img src="static/img/Untitled.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="events/show.html">
-                                    <h5 class="card-title">Jazz and Classical Music</h5>
-                                </a>
-                                <p class="card-text">This is a longer card with supporting text below as a natural
-                                    lead-in to
-                                    additional content. This content is a little bit longer.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <!-- https://upload.wikimedia.org/wikipedia/commons/7/71/20200229_03_Alcest_%2849605436357%29.jpg -->
-                            <img src="./static/img/20200229_03_Alcest_(49605436357).jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="events/show.html">
-                                    <h5 class="card-title">Rock & Roll Concert</h5>
-                                </a>
-                                <p class="card-text">This is a longer card with supporting text below as a natural
-                                    lead-in to
-                                    additional content. This content is a little bit longer.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
     <p class="text-end px-5 py-2"><a href="#"
