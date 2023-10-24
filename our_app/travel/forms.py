@@ -27,6 +27,10 @@ class EventForm(FlaskForm):
     tickets = FieldList(FormField(Ticket), min_entries=1)
     submitsubmit = SubmitField("Submit")
 
+#creating a search form
+class SearchForm(FlaskForm):
+    searched = StringField("Searched", validators=[InputRequired()])
+    submit = SubmitField("Submit")
 
 # Create new destination
 class DestinationForm(FlaskForm):
