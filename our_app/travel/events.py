@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from .models import Event, Artist, Ticket
 from . import db
 import os
-from .forms import EventForm, EventTicketsForm
+from .forms import EventForm
 from werkzeug.utils import secure_filename
 import sys
 
@@ -25,46 +25,52 @@ def all():
     events = db.session.scalars(db.select(Event)).all()
     return render_template('events/all.html', events=events)
 
+
 @destbp.route('/create', methods=['GET', 'POST'])
 def create():
     form = EventForm()
-    if request.method == 'POST' and form.validate_on_submit():
+    
+    if form.image.data:
+        form.imagePath.data = check_upload_file(form)
+        print(form.image.data, sys.stderr)
 
-        session['create'] = form.data
-        session['create_iamge'] = check_upload_file(form)
-        
-        return redirect(url_for("events.create.tickets"))
 
-    if create in session:
-        form.process(data=session['create'])
+    if form.addArtist.data:
+        form.artists.append_entry()
+    elif form.subArtist.data:
+        form.artists.pop_entry()
+    elif form.addTicket.data:
+        form.tickets.append_entry()
+    elif form.subTicket.data:
+        form.tickets.pop_entry()
+    elif form.submitsubmit.data and request.method == 'POST' and form.validate_on_submit():
+        event = Event(
+            event_name=form.event_name.data,
+            date=form.date.data,
+            description=form.description.data,
+            image = form.imagePath.data,
+        )
+        for artist in form.artists:
+            a = Artist(artist_name = artist.data)
+            event.artists.append(a)
+        for ticket in form.tickets:
+            t = Ticket(
+                ticket_name = ticket.ticket_name.data,
+                ticket_price = ticket.ticket_price.data,
+                ticket_description = ticket.ticket_description.data
+            )
+            event.tickets.append(t)
+            db.session.add(event)
+        db.session.commit()
+
+    
 
     return render_template('events/eventcreation.html', form=form)
 
-@destbp.route('/create/tickets', methods=['GET', 'POST'])
-def tickets():
-    form = EventTicketsForm
 
 
 
-
-# event = Event(
-#             event_name=form.event_name.data,
-#             date=form.date.data,
-#             description=form.description.data,
-#             image = db_file_path,
-#         )
-#         for artist in form.artists:
-#             a = Artist(artist_name = artist.data)
-#             event.artists.append(a)
-#         for ticket in form.tickets:
-#             t = Ticket(
-#                 ticket_name = ticket.ticket_name.data,
-#                 ticket_price = ticket.ticket_price.data,
-#                 ticket_description = ticket.ticket_description.data
-#             )
-#             event.tickets.append(t)
-#             db.session.add(event)
-#         db.session.commit()
+# 
 
 
 
