@@ -39,9 +39,8 @@ class CategoriesForm(FlaskForm):
     name =  StringField("Event Name", validators=[InputRequired()])
     submitsubmit = SubmitField("Submit")
 
-# User login
 
-
+#login for user
 class LoginForm(FlaskForm):
     user_name = StringField("User Name", validators=[
                             InputRequired('Enter user name')])
@@ -49,24 +48,18 @@ class LoginForm(FlaskForm):
                              InputRequired('Enter user password')])
     submit = SubmitField("Login")
 
-# User register
-
-
+# registration for user
 class RegisterForm(FlaskForm):
     user_name = StringField("User Name", validators=[InputRequired()])
     email_id = StringField("Email Address", validators=[
                            Email("Please enter a valid email")])
 
-    # linking two fields - password should be equal to data entered in confirm
     password = PasswordField("Password", validators=[InputRequired(),
                                                      EqualTo('confirm', message="Passwords should match")])
     confirm = PasswordField("Confirm Password")
-    # submit button
     submit = SubmitField("Register")
 
-# User comment
-
-
+# comment from user 
 class CommentForm(FlaskForm):
     text = TextAreaField('Comment', [InputRequired()])
     submit = SubmitField('Create')

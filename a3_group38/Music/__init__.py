@@ -9,43 +9,34 @@ db = SQLAlchemy()
 app = Flask(__name__)
 
 def create_app():
-    
-    #we use this utility module to display forms quickly
     Bootstrap5(app)
-
-    #this is a much safer way to store passwords
     Bcrypt(app)
+    app.secret_key = 'randomvalue'
 
-    #a secret key for the session object
-    #(it would be better to use an environment variable here)
-    app.secret_key = 'somerandomvalue'
-
-    #Configue and initialise DB
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///traveldb.sqlite'
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///MusicBdb.sqlite'
     db.init_app(app)
     from .models import Event, Ticket, Artist
     with app.app_context():
        db.create_all()
 
-    #config upload folder
     UPLOAD_FOLDER = '/static/image'
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
     
-    #initialise the login manager
+  
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    #create a user loader function takes userid and returns User
-    from .models import User  # importing here to avoid circular references
+
+    from .models import User  
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    #add Blueprints
+
     from . import views
     app.register_blueprint(views.mainbp)
-
     from . import events
     app.register_blueprint(events.destbp)
     from . import auth
@@ -54,12 +45,9 @@ def create_app():
     return app
 
 @app.errorhandler(404) 
-# inbuilt function which takes error as parameter 
 def not_found(e): 
   return render_template("404.html", error=e)
 
-#this creates a dictionary of variables that are available
-#to all html templates
 @app.context_processor
 def get_context():
    year = datetime.datetime.today().year
