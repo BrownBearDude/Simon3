@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from .models import Event, Artist, Ticket
+from .models import Event, Artist, Ticket, Category
 from . import db
 import os
-from .forms import EventForm
+from .forms import EventForm, CategoriesForm
 from werkzeug.utils import secure_filename
 import sys
+
+
+
 
 destbp = Blueprint('events', __name__, url_prefix='/events')
 
@@ -26,13 +29,32 @@ def all():
     return render_template('events/all.html', events=events)
 
 
+#page which should not be accessible to users to add or remove ccategory options
+@destbp.route('/admin/categories', methods=['GET', 'POST'])
+def categories():
+    form = CategoriesForm()
+   
+    if request.method == 'POST' and form.validate_on_submit():
+        category = Category(
+            category_name = form.name.data
+        )
+        db.session.add(category)
+        db.session.commit()
+    categories = db.session.scalars(db.select(Category)).all()
+    return render_template('admin/categories.html', categories=categories, form=form)
+
+
 @destbp.route('/create', methods=['GET', 'POST'])
 def create():
+    categories = db.session.scalars(db.select(Category)).all()
     form = EventForm()
+    form.categories.choices = [(g.id, g.category_name) for g in categories]
+    form.event_status.choices = [(0, "Open"), (1, "Inactive"), (3, "Sold Out"), (4, "Cancelled")]
     
+    print(form.categories.data, file=sys.stderr)
+
     if form.image.data:
         form.imagePath.data = check_upload_file(form)
-        print(form.image.data, sys.stderr)
 
 
     if form.addArtist.data:
@@ -50,6 +72,7 @@ def create():
             description=form.description.data,
             image = form.imagePath.data,
         )
+        
         for artist in form.artists:
             a = Artist(artist_name = artist.data)
             event.artists.append(a)
@@ -57,10 +80,14 @@ def create():
             t = Ticket(
                 ticket_name = ticket.ticket_name.data,
                 ticket_price = ticket.ticket_price.data,
-                ticket_description = ticket.ticket_description.data
+                ticket_description = ticket.ticket_description.data,
+                ticket_quantity = ticket.ticket_quantity.data
             )
             event.tickets.append(t)
-            db.session.add(event)
+        for category in form.categories.data:
+            category_object = db.session.scalar(db.select(Category).where(Category.id==category))
+            event.categories.append(category_object)
+        db.session.add(event)
         db.session.commit()
 
     

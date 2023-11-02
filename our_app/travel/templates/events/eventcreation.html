@@ -13,6 +13,8 @@
     <form method="post" enctype="multipart/form-data" id="theForm"> 
         {{render_field(form.event_name)}}
         {{render_field(form.date)}}
+        {{render_field(form.event_status)}}
+        {{render_field(form.categories)}}
         {{render_field(form.description)}}
         <img src="{{ form.imagePath.data }}" style="max-width: 150px; max-height: 150px;"></img>
         {{render_field(form.image, accept=".PNG,.png,.JPEG,.jpeg,.JPG,.jpg")}}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% from 'bootstrap5/form.html' import render_form %}
+{% from 'bootstrap5/form.html' import render_field %}
+
+{% block content %}
+
+    <div class="container">
+        Categories:
+        
+        {% for category in categories %}
+            {{category.id}}
+            {{category.category_name}}
+        {% endfor %}
+    
+        {{render_form(form)}}
+    </div>
+{% endblock %}
+
+
