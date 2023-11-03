@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from .models import Event, Artist, Ticket, Category
+from .models import Event, Artist, Ticket, Category, Comment
 from . import db
 import os
-from .forms import EventForm, CategoriesForm
+from .forms import EventForm, CategoriesForm, CommentForm
 from werkzeug.utils import secure_filename
 import sys
 
@@ -20,7 +20,7 @@ def book(id):
 def show(id):
     event = db.session.scalar(db.select(Event).where(Event.id==id))
     min_ticket_price = min(event.tickets, key=lambda x: x.ticket_price).ticket_price
-
+    form = CommentForm()    
     return render_template('events/show.html', event=event, min_ticket_price=min_ticket_price, id=id)
 
 @destbp.route('/all', methods=['GET', 'POST'])
@@ -103,3 +103,23 @@ def check_upload_file(form):
   db_upload_path = '/static/image/' + secure_filename(filename)
   fp.save(upload_path)
   return db_upload_path
+
+@destbp.route('/<id>/comment', methods=['GET', 'POST'])  
+@login_required
+def comment(id):  
+    form = CommentForm()  
+    #get the destination object associated to the page and the comment
+    destination = db.session.scalar(db.select(Event).where(Event.id==id))
+    if form.validate_on_submit():  
+      #read the comment from the form
+      comment = Comment(text=form.text.data, destination=destination,
+                        user=current_user) 
+      #here the back-referencing works - comment.destination is set
+      # and the link is created
+      db.session.add(comment) 
+      db.session.commit() 
+      #flashing a message which needs to be handled by the html
+      flash('Your comment has been added', 'success')  
+      # print('Your comment has been added', 'success') 
+    # using redirect sends a GET request to destination.show
+    return redirect(url_for('Event.show', id=id))
