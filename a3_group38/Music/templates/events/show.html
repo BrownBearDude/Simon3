@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
+{% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
+
+
 <div class="container">
     <div class="row">
         <div class="col-12 col-lg-4">
@@ -9,9 +12,7 @@
         </div>
         <div class="col px-lg-5">
             {{event.categories[0].category_name}}
-            <h1>
-                {{event.event_name}} - {{event.date}}
-            </h1>
+            <h1>{{event.event_name}} - {{event.date}} </h1>
             <a href="/events/{{id}}/book" class="btn btn-success" >Book tickets from ${{min_ticket_price|round}}</a> 
             <p>Event organizer</p>
             <h3>Categories</h3>
@@ -36,6 +37,24 @@
     {% endfor %}
     </ul>
     
+    <div class="row">  
+        <div class="col-md-12">  
+          <h2>Comments</h1>  
+        </div>  
+      </div>  
+   
+      <div class="row border-bottom"> 
+        {{ render_form(form,"/events/{0}/comment".format(event.id)) }}
+        
+        {% for comment in event.comments %}
+        <div class="col-md-12">  
+          <b>{{ comment.user.name }} <span class="ml-2 text-muted">{{comment.created_at.strftime("%d/%m/%Y at %I:%M %p")}}</span></b>
+          <p>{{ comment.text }}</p>  
+        </div> 
+        {% endfor %} 
+      </div>
+
+    </div> 
     
 </div>
 {% endblock %}
