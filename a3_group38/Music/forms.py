@@ -46,9 +46,16 @@ class CategoriesForm(FlaskForm):
     name =  StringField("Event Name", validators=[InputRequired()])
     submitsubmit = SubmitField("Submit")
 
+
 class BookingForm(FlaskForm):
     tickets = FieldList(IntegerField("amount", default=0, validators=[InputRequired("0 or a +ve number")]))
     submit = SubmitField("Check Out")
+
+#creating a search form
+class SearchForm(FlaskForm):
+    searched = StringField("Searched", validators=[InputRequired()])
+    submit = SubmitField("Submit")
+
 
 #login for user
 class LoginForm(FlaskForm):
