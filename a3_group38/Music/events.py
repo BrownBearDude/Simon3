@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from .models import Event, Artist, Ticket, Category
+from .models import Event, Artist, Ticket, Category, User
 from . import db
 import os
 from .forms import EventForm, CategoriesForm
 from werkzeug.utils import secure_filename
+from flask_login import login_required, current_user
 import sys
 
 
@@ -45,13 +46,13 @@ def categories():
 
 
 @destbp.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
+    
     categories = db.session.scalars(db.select(Category)).all()
     form = EventForm()
     form.categories.choices = [(g.id, g.category_name) for g in categories]
     form.event_status.choices = [(0, "Open"), (1, "Inactive"), (3, "Sold Out"), (4, "Cancelled")]
-    
-    print(form.categories.data, file=sys.stderr)
 
     if form.image.data:
         form.imagePath.data = check_upload_file(form)
@@ -71,6 +72,7 @@ def create():
             date=form.date.data,
             description=form.description.data,
             image = form.imagePath.data,
+            user = current_user
         )
         
         for artist in form.artists:

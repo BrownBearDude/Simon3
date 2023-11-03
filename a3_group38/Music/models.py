@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     emailid = db.Column(db.String(100), index=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     comments = db.relationship('Comment', backref='user')
+    events = db.relationship('Event', backref='user')
 
 
 
@@ -32,6 +33,7 @@ class Event(db.Model):
     date = db.Column(db.String(200))
     description = db.Column(db.String(400))
     image = db.Column(db.String(400))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     artists = db.relationship('Artist', backref='events')
     tickets = db.relationship('Ticket', backref='events')
     comments = db.relationship('Comment', backref='events')
