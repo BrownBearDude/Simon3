@@ -5,6 +5,7 @@ import os
 from .forms import EventForm, CategoriesForm
 from werkzeug.utils import secure_filename
 import sys
+from flask_login import login_required
 
 
 
@@ -45,6 +46,7 @@ def categories():
 
 
 @destbp.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
     categories = db.session.scalars(db.select(Category)).all()
     form = EventForm()
