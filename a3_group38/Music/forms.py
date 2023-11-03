@@ -39,6 +39,10 @@ class CategoriesForm(FlaskForm):
     name =  StringField("Event Name", validators=[InputRequired()])
     submitsubmit = SubmitField("Submit")
 
+#creating a search form
+class SearchForm(FlaskForm):
+    searched = StringField("Searched", validators=[InputRequired()])
+    submit = SubmitField("Submit")
 
 #login for user
 class LoginForm(FlaskForm):
