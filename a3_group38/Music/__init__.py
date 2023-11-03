@@ -53,3 +53,22 @@ def not_found(e):
 def get_context():
    year = datetime.datetime.today().year
    return dict(year=year)
+
+@app.context_processor
+def base():
+   form = SearchForm()
+   return dict(form=form)
+
+@app.route('/search', methods=["POST"])
+def search():
+    form = SearchForm()
+    event = event.query
+    if form.validate_on_submit():
+        event_searched = form.searched.data
+        event = event.fitler(event.event_name(event.event_name.like('%' + event.searched + '%')))
+        event = event.order_by(event.title).all()
+
+        return render_template("search.html", 
+            form=form,
+            searched = event.searched,
+            event = event)
