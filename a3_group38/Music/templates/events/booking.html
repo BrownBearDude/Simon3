@@ -1,62 +1,39 @@
 {% extends 'base.html' %}
 
+{% from 'bootstrap5/form.html' import render_form %}
+{% from 'bootstrap5/form.html' import render_field %}
+
+
 {% block content %}
 <div class="container">
 
     <h1>{{event.event_name}} - {{event.date}} <a href="/events/{{event.id}}" class="btn btn-danger">Back to Details</a></h1>
     <hr />
+    
     <div class="container">
+        <form method="post" > 
+        {% for pack in packed %}
         <div class="row">
             <div class="col-8">
-                <h4>General Addmission</h4>
-                <span>$10</span>
-                <p>A general Seat which is good enough for most people Some policies apply.</p>
+                <h4>{{pack[0].ticket_name}}</h4>
+                <span>${{pack[0].ticket_price}}</span>
+                <p>{{pack[0].ticket_description}}</p>
             </div>
             <div class="col justify-content-center align-middle form-group w-10">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>0</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
+               {{render_field(pack[1])}}
             </div>
         </div>
         <hr />
-        <div class="row">
-            <div class="col-8">
-                <h4>Vip Addmission</h4>
-                <span>$100</span>
-                <p>A Special Seat which is more
-                    expensive and specialer. Some
-                    policy of the purchase of the ticket</p>
-            </div>
-            <div class="col justify-content-center align-middle form-group w-10">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-        </div>
-        <hr />
+        {% endfor %}
 
         <div class=" fixed-bottom">
             <hr />
-            <h2 class="container">
-                <div class="row">
-                    <div class="col text-center">Total:</div>
-                    <div class="col text-center">$10</div>
-                </div>
-            </h2>
+
             <div style="background-color: orangered; color: white;">
-                <h2 class="text-center p-3">Checkout</h2>
+                <h2 class="text-center p-3">{{render_field(form.submit)}}</h2>
             </div>
         </div>
-
+        </form> 
     </div>
 
 </div>

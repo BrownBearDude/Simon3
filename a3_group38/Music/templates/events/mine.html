@@ -2,17 +2,20 @@
 
 {% block content %}
 <div class="container">
-
+    <h2><a href="{{url_for('events.create')}}">create new event</a></h2>
+    <h2>Your events:</h2>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
         {% for event in events %}
         <div class="col d-none d-sm-block">
             <div class="card">
+
                 <img src="{{event.image}}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <a href="{{event.id}}">
                         <h5 class="card-title">{{ event.event_name }} -- {{event.date}}</h5>
                     </a>
                     <p class="card-text">{{event.description|truncate(100, False, '...', 0)}}</p>
+                    <a href="{{url_for('events.update', id=event.id)}}">edit event</a>
                 </div>
             </div>
         </div>

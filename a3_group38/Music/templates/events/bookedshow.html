@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% from 'bootstrap5/form.html' import render_form %}
+{% from 'bootstrap5/form.html' import render_field %}
+
+
+{% block content %}
+<div class="container">
+    <h5>booking id: {{booking.id}}</h5>
+    <p>for event: {{booking.events.event_name}}</p>
+    <p>with id: {{booking.events.id}}</p>
+    booked tickets:
+    {% for booked_ticket in booked_tickets %}
+        <p>Amount: {{booked_ticket.quantity}}</p>
+        <p>Ticket name: {{booked_ticket.tickets.ticket_name}}</p>
+        <p>Ticket Id: {{booked_ticket.tickets.id}}</p>
+    {% endfor %}
+   
+</div>
+
+{% endblock %}

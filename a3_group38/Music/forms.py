@@ -1,14 +1,21 @@
 from flask_wtf import FlaskForm, Form
 from wtforms import widgets
 from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, DateField, FieldList, FormField, DecimalField, HiddenField, SelectField, IntegerField, SelectMultipleField
-from wtforms.validators import InputRequired, Email, EqualTo
+from wtforms.validators import InputRequired, Email, EqualTo, NumberRange
 from flask_wtf.file import FileRequired, FileField, FileAllowed
 
+
 ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'png', 'jpg', 'jpeg'}
+
+
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(html_tag='ol', prefix_label=False)
     option_widget = widgets.CheckboxInput()
+
+class Explore(FlaskForm):
+    categories = MultiCheckboxField("Categories", coerce=int)
+    submitsubmit = SubmitField("Search")
 
 class Ticket(Form):
     ticket_name = StringField("Ticket Name", validators=[InputRequired()])
@@ -39,6 +46,9 @@ class CategoriesForm(FlaskForm):
     name =  StringField("Event Name", validators=[InputRequired()])
     submitsubmit = SubmitField("Submit")
 
+class BookingForm(FlaskForm):
+    tickets = FieldList(IntegerField("amount", default=0, validators=[InputRequired("0 or a +ve number")]))
+    submit = SubmitField("Check Out")
 
 #login for user
 class LoginForm(FlaskForm):

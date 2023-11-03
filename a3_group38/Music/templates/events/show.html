@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% from 'bootstrap5/form.html' import render_form %}
+{% from 'bootstrap5/form.html' import render_field %}
 
 {% block content %}
 <div class="container">
@@ -23,13 +25,16 @@
                 <a class="btn btn-danger" >Sold Out</a>
             {% elif event.status == 3 %}
                 <a class="btn btn-danger" >Cancelled</a>
+            {% elif event.status == 4 %}
+                <a class="btn btn-danger" >It already ended</a>
             {% endif %}
 
             <p>Event organizer: {{event.user.name}}</p>
             {% if event.categories|length > 0 %}
+            <h3>Categories</h3>    
                 {% for category in event.categories %}
-                    <h3>Categories</h3>
-                    <span class="badge rounded-pill text-bg-primary">Jazz</span>
+                    
+                    <span class="badge rounded-pill text-bg-primary">{{category.category_name}}</span>
                 {% endfor %}
             {% endif %}
         </div>
@@ -48,6 +53,14 @@
         
     {% endfor %}
     </ul>
+    {{ render_form(commentform,"/events/{0}/comment".format(event.id)) }}
+      
+      {% for comment in event.comments %}
+      <div class="col-md-12">  
+        <b>{{ comment.user.name }} <span class="ml-2 text-muted">January 2024</span></b>
+        <p>{{ comment.text }}</p>  
+      </div> 
+      {% endfor %} 
     
     
 </div>
