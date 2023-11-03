@@ -15,7 +15,15 @@
                 Date: {{event.date}}
             </h2>
             
-            <a href="/events/{{id}}/book" class="btn btn-success" >Book tickets from ${{min_ticket_price|round}}</a>
+            {% if event.status == 0 %}
+                <a href="/events/{{id}}/book" class="btn btn-success" >Book tickets from ${{min_ticket_price|round}}</a>
+            {% elif event.status == 1 %}
+                <a class="btn btn-danger" >Currently Inactive</a>
+            {% elif event.status == 2 %}
+                <a class="btn btn-danger" >Sold Out</a>
+            {% elif event.status == 3 %}
+                <a class="btn btn-danger" >Cancelled</a>
+            {% endif %}
 
             <p>Event organizer: {{event.user.name}}</p>
             {% if event.categories|length > 0 %}

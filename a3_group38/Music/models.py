@@ -30,6 +30,7 @@ class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     event_name = db.Column(db.String(200))
+    status = db.Column(db.Integer)
     date = db.Column(db.String(200))
     description = db.Column(db.String(400))
     image = db.Column(db.String(400))

@@ -72,7 +72,8 @@ def create():
             date=form.date.data,
             description=form.description.data,
             image = form.imagePath.data,
-            user = current_user
+            user = current_user,
+            status = form.event_status.data
         )
         
         for artist in form.artists:
