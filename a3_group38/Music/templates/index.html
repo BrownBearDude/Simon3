@@ -9,11 +9,9 @@
             <h2>
                 Search for a music Event!
             </h2>
-            <form class="form-inline">
-                <div class="form-group">
-                    <input class="form-control">
-                    <input class="btn btn-lg btn-primary" type="submit" />
-                </div>
+            <form class="form-inline d-flex flex-nowrap" action="{{url_for('main.search')}}" >
+                <input type="text" name="search" class="form-control flex-grow-1 my-1 mr-sm-2"   id="SearchForm">
+                <button type="submit" class="flex-shrink-1 btn btn-primary my-1">Submit</button>
             </form>
         </div>
     </div>
@@ -25,81 +23,13 @@
 
 {% block content %}
 <div class="container">
+    <h3><a href="{{url_for('events.explore')}}">Explore by category</a></h3>
 
-    <h1> Explore Categories</h1>
-    <hr />
-    <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4 h4">
-            <img src="static/image/20200229_03_Alcest_(49605436357).jpg" height="70" width="70" class="d-inline rounded"
-                alt="">
-            Rock & Roll
-            <span class="d-inline text-end"></span>
-            <br />
-            <hr />
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-4 h4">
-            <img src="static/image/20200229_03_Alcest_(49605436357).jpg" height="70" width="70" class="d-inline rounded"
-                alt="">
-            Rock & Roll
-            <span class="d-inline text-end"></span>
-            <br />
-            <hr />
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-4 h4">
-            <img src="static/image/20200229_03_Alcest_(49605436357).jpg" height="70" width="70" class="d-inline rounded"
-                alt="">
-            Rock & Roll
-            <span class="d-inline text-end"></span>
-            <br />
-            <hr />
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-4 h4">
-            <img src="static/image/20200229_03_Alcest_(49605436357).jpg" height="70" width="70" class="d-inline rounded"
-                alt="">
-            Rock & Roll
-            <span class="d-inline text-end"></span>
-            <br />
-            <hr />
-        </div>
-        <div class="d-none d-sm-block col-xs-12 col-sm-6 col-md-4 h4">
-            <img src="static/image/20200229_03_Alcest_(49605436357).jpg" height="70" width="70" class="d-inline rounded"
-                alt="">
-            Rock & Roll
-            <span class="d-inline text-end"></span>
-            <br />
-            <hr />
-        </div>
-        <div class="d-none d-sm-block col-xs-12 col-sm-6 col-md-4 h4">
-            <img src="static/image/20200229_03_Alcest_(49605436357).jpg" height="70" width="70" class="d-inline rounded"
-                alt="">
-            Rock & Roll
-            <span class="d-inline text-end"></span>
-            <br />
-            <hr />
-        </div>
-
-    </div>
-    <p class="text-end px-5 py-2"><a href="#"
-            class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">View
-            More</a></p>
+    
     <hr />
 
-    <div id="carouselExample" class="carousel slide">
-        <div class="d-flex">
-            <div class="">
-                <button class="btn m-0 p-0" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <h1>←</h1>
-                </button>
-            </div>
-            <div class="ms-4">
-                <h1> New Events in Brisbane</h1>
-            </div>
-            <div class="text-end flex-fill">
-                <button class="btn m-0 p-0" text-end data-bs-target="#carouselExample" data-bs-slide="next">
-                    <h1>→</h1>
-                </button>
-            </div>
-        </div>
+        <h1> New Events in Brisbane</h1>
+        
         <hr />
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
             {% for event in events %}
@@ -108,19 +38,28 @@
     
                     <img src="{{event.image}}" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <a href="{{event.id}}">
+                        <a href="{{url_for('events.show', id=event.id )}}">
                             <h5 class="card-title">{{ event.event_name }} -- {{event.date}}</h5>
                         </a>
                         <p class="card-text">{{event.description|truncate(100, False, '...', 0)}}</p>
                     </div>
+                    {% if event.status == 0 %}
+                        <a class="btn btn-success" >Open</a>
+                    {% elif event.status == 1 %}
+                        <a class="btn btn-danger" >Currently Inactive</a>
+                    {% elif event.status == 2 %}
+                        <a class="btn btn-danger" >Sold Out</a>
+                    {% elif event.status == 3 %}
+                        <a class="btn btn-danger" >Cancelled</a>
+                    {% elif event.status == 4 %}
+                        <a class="btn btn-danger" >It already ended</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
         </div>
-    </div>
-    <p class="text-end px-5 py-2"><a href="#"
-            class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">View
-            More</a></p>
+
+
     <hr />
     <br />
     <br />

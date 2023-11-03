@@ -6,26 +6,36 @@
     <br/>
 
     <div class="container">
-    <div class="row mt-5 mb-5 justify-content-center">
-        <div class="col-md-5">
-        </div>
-     </div>
-
-     <div class="card-group">
-        {% for Event in events %}
-        <div class="card mx-3">
-           <img class="card-img-top"
-              src="{{Event.image}}" alt="Event picture">
-           <div class="card-body">
-              <h5 class="card-title">{{Event.event_name}}</h5>
-              <p class="card-text">{{Event.description}}</p>
-           </div>
-           <a class ="btn btn-danger"> View Details </a>
-        </div>
-        {% endfor %}
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+         {% for event in events %}
+         <div class="col d-none d-sm-block">
+             <div class="card">
+ 
+                 <img src="{{event.image}}" class="card-img-top" alt="...">
+                 <div class="card-body">
+                     <a href="{{url_for('events.show', id=event.id)}}">
+                         <h5 class="card-title">{{ event.event_name }} -- {{event.date}}</h5>
+                     </a>
+                     <p class="card-text">{{event.description|truncate(100, False, '...', 0)}}</p>
+                 </div>
+                 {% if event.status == 0 %}
+                     <a class="btn btn-success" >Open</a>
+                 {% elif event.status == 1 %}
+                     <a class="btn btn-danger" >Currently Inactive</a>
+                 {% elif event.status == 2 %}
+                     <a class="btn btn-danger" >Sold Out</a>
+                 {% elif event.status == 3 %}
+                     <a class="btn btn-danger" >Cancelled</a>
+                 {% elif event.status == 4 %}
+                     <a class="btn btn-danger" >It already ended</a>
+                 {% endif %}
+             </div>
+         </div>
+         {% endfor %}
      </div>
     </div>
     <br/>
 
 {% endblock %}
+
 
